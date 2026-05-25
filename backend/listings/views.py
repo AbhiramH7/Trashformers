@@ -70,6 +70,10 @@ class ListingListCreateView(APIView):
         if search:
             queryset = queryset.filter(title__icontains=search)
 
+        seller = request.query_params.get('seller')
+        if seller:
+            queryset = queryset.filter(seller__id=seller)
+
         # --- Sorting ---
         sort = request.query_params.get('sort', 'newest')
         listings = list(queryset)
