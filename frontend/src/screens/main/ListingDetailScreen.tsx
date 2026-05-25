@@ -3,6 +3,7 @@ import {
   View, Text, ScrollView, Image, TouchableOpacity,
   StyleSheet, ActivityIndicator, Alert,
 } from 'react-native';
+import ListingMap from '../../components/ListingMap';
 import { listingsAPI } from '../../api/listings';
 import { ordersAPI } from '../../api/orders';
 import { useAuth } from '../../context/AuthContext';
@@ -95,10 +96,21 @@ export default function ListingDetailScreen({ route, navigation }: any) {
           </View>
         </TouchableOpacity>
 
-        {listing.address ? <>
-          <Text style={styles.sectionTitle}>Pickup Location</Text>
-          <Text style={styles.address}>📍 {listing.address}</Text>
-        </> : null}
+        {listing.address || (listing.latitude && listing.longitude) ? (
+          <>
+            <Text style={styles.sectionTitle}>Pickup Location</Text>
+            {listing.latitude && listing.longitude ? (
+              <ListingMap
+                latitude={parseFloat(listing.latitude)}
+                longitude={parseFloat(listing.longitude)}
+                title={listing.address || 'Pickup Location'}
+                description={listing.title}
+              />
+            ) : (
+              <Text style={styles.address}>📍 {listing.address}</Text>
+            )}
+          </>
+        ) : null}
 
         <Text style={styles.postedAt}>
           Listed {new Date(listing.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}

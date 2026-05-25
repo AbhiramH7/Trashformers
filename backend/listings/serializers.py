@@ -2,6 +2,7 @@ import math
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import Category, WasteListing
+from .geocoding import geocode_address
 
 User = get_user_model()
 
@@ -58,7 +59,15 @@ class WasteListingSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user
-        # Auto-fill location from user profile if not provided
+        # Auto-geocode address if lat/lng not provided
+        if not validated_data.get('latitude') or not validated_data.get('longitude'):
+            address = validated_data.get('address')
+            if address:
+                lat, lng = geocode_address(address)
+                if lat and lng:
+                    validated_data['latitude'] = lat
+                    validated_data['longitude'] = lng
+        # Fallback to user's location
         if not validated_data.get('latitude') and user.latitude:
             validated_data['latitude'] = user.latitude
         if not validated_data.get('longitude') and user.longitude:
@@ -80,6 +89,15 @@ class WasteListingCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         request = self.context.get('request')
         user = request.user
+        # Auto-geocode address if lat/lng not provided
+        if not validated_data.get('latitude') or not validated_data.get('longitude'):
+            address = validated_data.get('address')
+            if address:
+                lat, lng = geocode_address(address)
+                if lat and lng:
+                    validated_data['latitude'] = lat
+                    validated_data['longitude'] = lng
+        # Fallback to user's location
         if not validated_data.get('latitude') and user.latitude:
             validated_data['latitude'] = user.latitude
         if not validated_data.get('longitude') and user.longitude:
