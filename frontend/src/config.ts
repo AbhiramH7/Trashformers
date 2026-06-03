@@ -3,7 +3,7 @@
 const Config = {
   // Android emulator → host machine localhost
   // For physical device: replace with your machine's local IP e.g. 'http://192.168.1.10:8000/api'
-  BASE_URL: 'https://trashformers-hackathon.loca.lt/api',
+  BASE_URL: 'https://trashformers-backend.onrender.com/api',
 
   // Pagination
   PAGE_SIZE: 15,
