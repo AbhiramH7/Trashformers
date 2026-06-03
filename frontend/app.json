@@ -25,7 +25,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyA2F1vTrzbNG_tlHiAQzS53hUB-rUHJn_I"
         }
-      }
+      },
+      "package": "com.anonymous.trashformers"
     },
     "web": {
       "favicon": "./assets/favicon.png"
