@@ -5,7 +5,10 @@ import Config from '../config';
 const apiClient = axios.create({
   baseURL: Config.BASE_URL,
   timeout: Config.TIMEOUT_MS,
-  headers: { 'Content-Type': 'application/json' },
+  headers: { 
+    'Content-Type': 'application/json',
+    'bypass-tunnel-reminder': 'true'
+  },
 });
 
 // Attach JWT to every request
