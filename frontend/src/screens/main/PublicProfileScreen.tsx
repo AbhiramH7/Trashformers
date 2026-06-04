@@ -55,9 +55,12 @@ export default function PublicProfileScreen({ route, navigation }: any) {
         <TouchableOpacity
           style={styles.chatBtn}
           onPress={() =>
-            navigation.navigate('Chat', {
-              recipientId: profile.id,
-              recipientName: profile.username,
+            navigation.navigate('ChatTab', {
+              screen: 'ChatThread',
+              params: {
+                recipientId: profile.id,
+                recipientName: profile.username,
+              },
             })
           }
         >

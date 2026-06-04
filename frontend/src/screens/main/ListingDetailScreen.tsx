@@ -124,7 +124,14 @@ export default function ListingDetailScreen({ route, navigation }: any) {
           ? <View style={styles.actions}>
               <TouchableOpacity
                 style={styles.chatBtn}
-                onPress={() => navigation.navigate('Chat', { recipientId: listing.seller.id, listingId: listing.id, recipientName: listing.seller.username })}
+                onPress={() => navigation.navigate('ChatTab', {
+                  screen: 'ChatThread',
+                  params: {
+                    recipientId: listing.seller.id,
+                    recipientName: listing.seller.username,
+                    listingId: listing.id,
+                  },
+                })}
               >
                 <Text style={styles.chatBtnText}>💬 Chat</Text>
               </TouchableOpacity>
