@@ -9,6 +9,9 @@
     "scheme": "trashformers",
     "ios": {
       "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Trashformers needs your location to show nearby waste listings and tag your listing on the map."
+      },
       "config": {
         "googleMapsApiKey": "YOUR_IOS_MAPS_API_KEY"
       }
@@ -21,6 +24,10 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ],
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyA2F1vTrzbNG_tlHiAQzS53hUB-rUHJn_I"

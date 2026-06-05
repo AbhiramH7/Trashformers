@@ -1,26 +1,40 @@
 import requests
-from django.conf import settings
 
 
 def geocode_address(address: str) -> tuple[float | None, float | None]:
     """
-    Convert an address string to (latitude, longitude) using Google Geocoding API.
-    Returns (None, None) if geocoding fails or API key is not set.
+    Convert an address string to (latitude, longitude) using the free
+    Nominatim API from OpenStreetMap.
+
+    No API key required. Rate limit: 1 request/second (sufficient for
+    listing creation flow).
+
+    Returns (None, None) if geocoding fails.
     """
-    api_key = getattr(settings, 'GOOGLE_MAPS_API_KEY', None)
-    if not api_key or not address:
+    if not address or not address.strip():
         return None, None
 
     try:
         response = requests.get(
-            'https://maps.googleapis.com/maps/api/geocode/json',
-            params={'address': address, 'key': api_key},
-            timeout=5,
+            'https://nominatim.openstreetmap.org/search',
+            params={
+                'q': address.strip(),
+                'format': 'json',
+                'limit': 1,
+                'addressdetails': 0,
+            },
+            headers={
+                # Nominatim requires a descriptive User-Agent identifying your app
+                'User-Agent': 'Trashformers/1.0 (waste-marketplace-hackathon)',
+                'Accept-Language': 'en',
+            },
+            timeout=8,
         )
         data = response.json()
-        if data.get('status') == 'OK' and data.get('results'):
-            loc = data['results'][0]['geometry']['location']
-            return loc['lat'], loc['lng']
+        if data and len(data) > 0:
+            lat = float(data[0]['lat'])
+            lon = float(data[0]['lon'])
+            return lat, lon
     except Exception:
         pass
 
