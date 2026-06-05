@@ -22,14 +22,16 @@ export default function ListingMap({ latitude, longitude, title, description }: 
 
   const openInMaps = () => {
     const label = encodeURIComponent(title || 'Pickup Location');
-    const url =
-      Platform.OS === 'ios'
-        ? `maps:?q=${label}&ll=${latitude},${longitude}`
-        : `geo:${latitude},${longitude}?q=${latitude},${longitude}(${label})`;
+    // Use direct Google Maps URL — reliable on both iOS and Android.
+    // geo: URI on Android silently opens Maps but ignores coords (shows user location instead).
+    // Google Maps HTTPS URL always navigates to the exact lat/lng.
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}&query_place_id=${label}`;
+    const iosNativeUrl = `maps:?q=${label}&ll=${latitude},${longitude}`;
+
+    const url = Platform.OS === 'ios' ? iosNativeUrl : googleMapsUrl;
     Linking.openURL(url).catch(() => {
-      Linking.openURL(
-        `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`,
-      );
+      // Final fallback for both platforms
+      Linking.openURL(googleMapsUrl);
     });
   };
 
